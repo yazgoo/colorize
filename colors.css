@@ -1,0 +1,11 @@
+.mdcx { background-color:blue; }
+.txt7 { background-color:green; }
+.xb01_pointer { background-color:cyan; }
+.vertex_count { background-color:yellow; }
+.faces { background-color:purple; }
+.next { background-color:grey; }
+.next_target { border: 1px solid grey; margin: -1px; }
+.xb01 { border: 3px solid cyan; margin: -3px; }
+.size { border: 1px solid blue; margin: -1px; }
+.float { border: 3px solid red; margin: -3px; }
+.group { border: 1px solid purple; margin: -1px; }

@@ -1,0 +1,5 @@
+.column { float: left; width: 320px;}
+#chars { width: 150px }
+#bytes { width: 350px }
+#addresses { width: 30px }
+body { white-space: pre;font-family:monospace; }
