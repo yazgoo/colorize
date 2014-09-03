@@ -41,57 +41,72 @@ function fill_caption()
         what.innerHTML += " <a class="+i+" onclick=\"select_class('"+i+"')\">"+classes[i]+"</a>"
     }
 }
-function setup_file_input()
+function fill_data(shorts, bytes, floats, start)
 {
     var addressesDiv = document.getElementById('addresses');
     var shortsDiv = document.getElementById('shorts');
     var floatsDiv = document.getElementById('floats');
-    var bytesDiv = document.getElementById('bytes');
     var charsDiv = document.getElementById('chars');
+    var bytesDiv = document.getElementById('bytes');
+    if(start == undefined) {
+        start = 0;
+        charsDiv.innerHTML = ""
+            bytesDiv.innerHTML = ""
+            shortsDiv.innerHTML = ""
+            addressesDiv.innerHTML = ""
+            floatsDiv.innerHTML = ""
+    }
+        var i = start;
+        var end = start + 512;
+        if(end > bytes.length) end = bytes.length;
+        for(; i < end; i++) {
+            if(i % 16 == 0) addressesDiv.innerHTML += i.toString(16) + "<br/>";
+            if(i % 2 == 0) shortsDiv.innerHTML += shorts[i/2] + " ";
+            if(i % 4 == 0) floatsDiv.innerHTML += floats[i / 4] + " ";
+            var b = bytes[i].toString(16)
+                while(b.length < 2) b = "0" + b
+                    bytesDiv.innerHTML += b + " ";
+            if(32 < bytes[i] && bytes[i] < 127)
+                charsDiv.innerHTML += String.fromCharCode(bytes[i]);
+            else charsDiv.innerHTML += '.'
+                if(i % 16 == 15)
+                {
+                    floatsDiv.innerHTML += "<br/>"
+                        bytesDiv.innerHTML += "<br/>"
+                        charsDiv.innerHTML += "<br/>"
+                        shortsDiv.innerHTML += "<br/>"
+                }
+                else if(i % 4 == 3) bytesDiv.innerHTML += " "
+        }
+        if(i >= (bytes.length - 1))
+        {
+              var item = localStorage.getItem(fileInput.value);
+              if(item != null)
+                  bytesDiv.innerHTML = item;
+              document.getElementById('status').innerHTML = '';
+        }
+        else
+        {
+            document.getElementById('status').innerHTML = "" + Math.floor(i * 100.0 / bytes.length) + "%";
+            setTimeout(function() { fill_data(shorts, bytes, floats, i) }, 1000);
+        }
+}
+function setup_file_input()
+{
+    var bytesDiv = document.getElementById('bytes');
     var fileInput = document.getElementById('fileInput');
     fileInput.addEventListener('change', function(e) {
             var file = fileInput.files[0];
             var reader = new FileReader();
             reader.onload = function(e) {
-              var shorts = new Int16Array(reader.result);
-
-              shortsDiv.innerHTML = ""
-              addressesDiv.innerHTML = ""
-              for(i in shorts) {
-                  if(i % 8 == 0) addressesDiv.innerHTML += i.toString(16) + "<br/>";
-                  shortsDiv.innerHTML += shorts[i] + " ";
-                  if(i % 8 == 7) shortsDiv.innerHTML += "<br/>"
-              }
-              floatsDiv.innerHTML = ""
-              var floats = new Float32Array(reader.result);
-              for(i in floats) {
-                  floatsDiv.innerHTML += floats[i] + " ";
-                  if(i % 4 == 3) floatsDiv.innerHTML += "<br/>"
-              }
-              charsDiv.innerHTML = ""
-              bytesDiv.innerHTML = ""
-              var bytes = new Uint8Array(reader.result);
-              for(i in bytes) {
-                  var b = bytes[i].toString(16)
-                  while(b.length < 2) b = "0" + b
-                  bytesDiv.innerHTML += b + " ";
-                  if(32 < bytes[i] && bytes[i] < 127)
-                      charsDiv.innerHTML += String.fromCharCode(bytes[i]);
-                  else charsDiv.innerHTML += '.'
-                  if(i % 16 == 15)
-                  {
-                      bytesDiv.innerHTML += "<br/>"
-                      charsDiv.innerHTML += "<br/>"
-                  }
-                  else if(i % 4 == 3)
-                  {
-                      bytesDiv.innerHTML += " "
-                  }
-              }
+              var start = new Date().getTime();
               document.title = "Colorize - " + fileInput.value
-              var item = localStorage.getItem(fileInput.value);
-              if(item != null)
-                  bytesDiv.innerHTML = item;
+              var shorts = new Int16Array(reader.result);
+              var bytes = new Uint8Array(reader.result);
+              var floats = new Float32Array(reader.result);
+              fill_data(shorts, bytes, floats);
+              var end = new Date().getTime();
+              console.log(end - start);
               }
             reader.readAsArrayBuffer(file);    
             });

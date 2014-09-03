@@ -1,4 +1,5 @@
 .column { float: left; width: 320px;}
+#floats { width: 350px;}
 #chars { width: 150px }
 #bytes { width: 350px }
 #addresses { width: 30px }
