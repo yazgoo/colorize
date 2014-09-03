@@ -6,10 +6,9 @@ function highlight()
 {
     var selection = window.getSelection();
     var range = selection.getRangeAt(0);
-    var contents = range.extractContents().textContent;
-    console.log(contents);
+    var fragment = range.extractContents();//.textContent;
     var node = document.createElement('a');
-    node.innerHTML = contents;
+    node.appendChild(fragment.cloneNode(true));
     node.setAttribute("class", document.getElementById('current').className)
     range.insertNode(node);
     selection.removeAllRanges();

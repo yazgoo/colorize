@@ -18,9 +18,3 @@ Customizing
 The pre-defined CSS styles are defined both
   *  in colors.css: the styles
   *  in colors.js: their description
-
-
-Limitations
-==========
-
-Multi-line selections are not yet supported.
