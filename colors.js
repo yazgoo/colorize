@@ -11,4 +11,5 @@ var colors = {
     "next_target": "a pointer target",
     "size": "a size (number of item after)",
     "float_address": "float address size to floats zone",
+    "vert_4bytes": "4B count to vertices",
 }

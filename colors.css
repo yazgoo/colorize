@@ -2,6 +2,7 @@
 .txt7 { background-color:green; }
 .xb01_pointer { background-color:cyan; }
 .vertex_count { background-color:yellow; }
+.vert_4bytes { background-color:coral; }
 .faces { background-color:purple; }
 .next { background-color:grey; }
 .float_address { background-color:red; }

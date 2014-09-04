@@ -1,6 +1,17 @@
-.column { float: left; width: 320px;}
+.column { float: left; width: 320px; white-space: pre;
+font-family:monospace; font-size: 12px}
+.top_menu {
+    position: fixed;
+    background-color: white;
+    border-bottom: 1px solid black;
+width: 100%;
+top: 2;
+left: 0;
+ }
+.columns { margin-top: 80px; }
 #floats { width: 350px;}
 #chars { width: 150px }
 #bytes { width: 350px }
 #addresses { width: 30px }
-body { white-space: pre;font-family:monospace; }
+body { font-family: sans-serif; font-size: 12px }
+form { display: inline }
