@@ -23,6 +23,7 @@ function remove_anchors(node)
 }
 function highlight()
 {
+    if(document.getElementById('disabled').checked) return;
     var selection = window.getSelection();
     var range = selection.getRangeAt(0);
     var fragment = range.extractContents();//.textContent;
