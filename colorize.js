@@ -1,6 +1,18 @@
 function update_storage()
 {
-    localStorage.setItem(document.getElementById('fileInput').value, document.getElementById('bytes').innerHTML);
+    var name = document.getElementById('fileInput').value;
+    var new_value = document.getElementById('bytes').innerHTML
+    localStorage.setItem(name + "_", localStorage.getItem(name));
+    localStorage.setItem(name, new_value);
+}
+function cancel()
+{
+    var name = document.getElementById('fileInput').value;
+    var new_value = document.getElementById('bytes').innerHTML;
+    var old_value = localStorage.getItem(name + "_");
+    localStorage.setItem(name, old_value);
+    localStorage.setItem(name + "_", new_value);
+    document.getElementById('bytes').innerHTML = old_value;
 }
 function highlight()
 {
