@@ -14,14 +14,24 @@ function cancel()
     localStorage.setItem(name + "_", new_value);
     document.getElementById('bytes').innerHTML = old_value;
 }
+function remove_anchors(node)
+{
+    console.log(node);
+    var anchors = node.querySelectorAll('a');
+    for(var i = 0; i < anchors.length; i++)
+        anchors[i].setAttribute("class", 'none')
+}
 function highlight()
 {
     var selection = window.getSelection();
     var range = selection.getRangeAt(0);
     var fragment = range.extractContents();//.textContent;
     var node = document.createElement('a');
-    node.appendChild(fragment.cloneNode(true));
-    node.setAttribute("class", document.getElementById('current').className)
+    var class_name = document.getElementById('current').className;
+    var old_node = fragment.cloneNode(true);
+    if(class_name == 'none') remove_anchors(old_node);
+    node.appendChild(old_node);
+    node.setAttribute("class", class_name)
     range.insertNode(node);
     selection.removeAllRanges();
     update_storage();
