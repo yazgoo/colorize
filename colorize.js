@@ -64,7 +64,7 @@ function fill_caption()
         what.innerHTML += " <a class="+i+" onclick=\"select_class('"+i+"')\">"+classes[i]+"</a>"
     }
 }
-function fill_data(shorts, bytes, floats, start)
+function fill_data(shorts, bytes, floats, start, stop)
 {
     var addressesDiv = document.getElementById('addresses');
     var shortsDiv = document.getElementById('shorts');
@@ -79,29 +79,40 @@ function fill_data(shorts, bytes, floats, start)
             addressesDiv.innerHTML = ""
             floatsDiv.innerHTML = ""
     }
+    var addresses_str = "";
+    var floats_str = "";
+    var bytes_str = "";
+    var chars_str = "";
+    var shorts_str = "";
+
         var i = start;
-        var end = start + 512;
-        if(end > bytes.length) end = bytes.length;
+        var end = start + 2048;
+        if(end > stop) end = stop;
         for(; i < end; i++) {
-            if(i % 16 == 0) addressesDiv.innerHTML += i.toString(16) + "<br/>";
-            if(i % 2 == 0) shortsDiv.innerHTML += shorts[i/2] + " ";
-            if(i % 4 == 0) floatsDiv.innerHTML += floats[i / 4] + " ";
+            if(i % 16 == 0) addresses_str += i.toString(16) + "<br/>";
+            if(i % 2 == 0) shorts_str += shorts[i/2] + " ";
+            if(i % 4 == 0) floats_str += floats[i / 4] + " ";
             var b = bytes[i].toString(16)
                 while(b.length < 2) b = "0" + b
-                    bytesDiv.innerHTML += b + " ";
+                    bytes_str += b + " ";
             if(32 < bytes[i] && bytes[i] < 127)
-                charsDiv.innerHTML += String.fromCharCode(bytes[i]);
-            else charsDiv.innerHTML += '.'
+                chars_str += String.fromCharCode(bytes[i]);
+            else chars_str += '.'
                 if(i % 16 == 15)
                 {
-                    floatsDiv.innerHTML += "<br/>"
-                        bytesDiv.innerHTML += "<br/>"
-                        charsDiv.innerHTML += "<br/>"
-                        shortsDiv.innerHTML += "<br/>"
+                    floats_str += "<br/>"
+                        bytes_str += "<br/>"
+                        chars_str += "<br/>"
+                        shorts_str += "<br/>"
                 }
-                else if(i % 4 == 3) bytesDiv.innerHTML += " "
+                else if(i % 4 == 3) bytes_str += " "
         }
-        if(i >= (bytes.length - 1))
+        addresses_str.innerHTML += floats_str;
+        floatsDiv.innerHTML += floats_str;
+        bytesDiv.innerHTML += bytes_str;
+        charsDiv.innerHTML += chars_str;
+        shortsDiv.innerHTML += shorts_str;
+        if(i >= (stop - 1))
         {
               var item = localStorage.getItem(fileInput.value);
               if(item != null)
@@ -110,8 +121,8 @@ function fill_data(shorts, bytes, floats, start)
         }
         else
         {
-            document.getElementById('status').innerHTML = "" + Math.floor(i * 100.0 / bytes.length) + "%";
-            setTimeout(function() { fill_data(shorts, bytes, floats, i) }, 1000);
+            document.getElementById('status').innerHTML = "" + Math.floor(i * 100.0 / stop) + "%";
+            setTimeout(function() { fill_data(shorts, bytes, floats, i, stop) }, 1000);
         }
 }
 function setup_file_input()
@@ -127,7 +138,9 @@ function setup_file_input()
               var shorts = new Int16Array(reader.result);
               var bytes = new Uint8Array(reader.result);
               var floats = new Float32Array(reader.result);
-              fill_data(shorts, bytes, floats);
+              var stop = bytes.length;
+              //if(stop > 10240) stop = 10240;
+              fill_data(shorts, bytes, floats, undefined, stop);
               var end = new Date().getTime();
               console.log(end - start);
               }
